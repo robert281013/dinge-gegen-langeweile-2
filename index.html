@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Anti-Langeweile Hub – Deluxe Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================== -->
+<!--  GLOBAL APPLE-STYLE DESIGN & VARIABLES         -->
+<!-- ============================================== -->
+<style>
+
+/* --------------------------------------------------------------
+   Root Vars (Light Mode)
+-------------------------------------------------------------- */
+:root {
+    /* Colors */
+    --bg: #f5f5f7;
+    --fg: #111;
+    --fg-soft: #333;
+    --accent: #007aff;
+    --accent-2: #5ac8fa;
+    --accent-3: #34c759;
+    --glass: rgba(255, 255, 255, 0.65);
+
+    /* Effects */
+    --blur: 24px;
+    --radius: 18px;
+    --shadow: 0 5px 40px rgba(0,0,0,0.12);
+
+    /* Transitions */
+    --ts: 0.4s cubic-bezier(.25,.8,.25,1);
+
+    /* Typography */
+    --font-ui: "Inter", "SF Pro Display", "SF Pro Text", Helvetica, sans-serif;
+
+    /* Layout */
+    --nav-height: 70px;
+
+    /* Animations */
+    --fade-time: 0.45s;
+}
+
+/* --------------------------------------------------------------
+   Root Vars (Dark Mode)
+-------------------------------------------------------------- */
+:root.dark {
+    --bg: #0d0d0f;
+    --fg: #fafafa;
+    --fg-soft: #d4d4d4;
+    --glass: rgba(25, 25, 26, 0.55);
+    --shadow: 0 5px 40px rgba(0,0,0,0.6);
+}
+
+/* --------------------------------------------------------------
+   Base
+-------------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-ui);
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background var(--ts), color var(--ts);
+}
+
+/* --------------------------------------------------------------
+   Page Fade-in
+-------------------------------------------------------------- */
+body {
+    opacity: 0;
+    animation: fadeInPage var(--fade-time) forwards ease-out;
+}
+@keyframes fadeInPage {
+    to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------
+   Smooth Scroll
+-------------------------------------------------------------- */
+html {
+    scroll-behavior: smooth;
+}
+
+/* --------------------------------------------------------------
+   Apple-Style Scrollbar
+-------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+:root.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+}
+
+/* --------------------------------------------------------------
+   Glassmorphism Cards
+-------------------------------------------------------------- */
+.glass {
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* --------------------------------------------------------------
+   Smooth Fade Animations
+-------------------------------------------------------------- */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.7s forwards ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeScale 0.55s forwards ease-out;
+}
+@keyframes fadeScale {
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* --------------------------------------------------------------
+   Parallax Background engine
+-------------------------------------------------------------- */
+.parallax-layer {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    pointer-events: none;
+    opacity: 0.07;
+    background-size: cover;
+    background-position: center;
+    transform: translateZ(0);
+}
+
+/* Light mode subtle layers */
+#parallax-1 { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDYwMCA2MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMzAwIiByPSIzMDAiIGZpbGw9IiNmZmYiIC8+PC9zdmc+'); }
+#parallax-2 { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDYwMCA2MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmZmYiIC8+PC9zdmc+'); }
+
+/* Dark mode variant lowers brightness */
+:root.dark .parallax-layer {
+    opacity: 0.05 !important;
+}
+
+/* --------------------------------------------------------------
+   Navigation (Apple-style)
+-------------------------------------------------------------- */
+#top-nav {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: var(--nav-height);
+    padding: 10px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    z-index: 2000;
+}
+
+.nav-btn {
+    padding: 10px 18px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--ts);
+    user-select: none;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(12px);
+    color: var(--fg);
+}
+:root.dark .nav-btn {
+    background: rgba(30,30,30,0.4);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    background: var(--accent);
+    color: white;
+}
+
+.nav-active {
+    background: var(--accent) !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------
+   Settings Button (top right)
+-------------------------------------------------------------- */
+#settings-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--ts);
+    font-weight: 600;
+    z-index: 2000;
+}
+:root.dark #settings-btn {
+    background: rgba(30,30,30,0.4);
+}
+
+#settings-btn:hover {
+    transform: scale(1.08);
+    background: var(--accent);
+    color: white;
+}
+
+/* --------------------------------------------------------------
+   Section Wrapper
+-------------------------------------------------------------- */
+.section {
+    display: none;
+    padding: calc(var(--nav-height) + 60px) 5vw 80px 5vw;
+    min-height: calc(100vh - var(--nav-height));
+    animation: fadeIn var(--fade-time) ease-out;
+}
+
+.active-section {
+    display: block;
+}
+
+/* Placeholder styling for upcoming sections */
+.section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Extra global button style */
+.button {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--ts);
+}
+.button:hover {
+    transform: translateY(-3px);
+}
+
+/* Large cards for Apple-style UI */
+.large-card {
+    padding: 26px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: var(--shadow);
+    transition: var(--ts);
+}
+.large-card:hover {
+    transform: translateY(-4px);
+}
+
+/* End of PART 1 */
+</style>
+</head>
+<body>
+
+<!-- ============================================== -->
+<!--  APPLE-STYLE PARALLAX BACKGROUND LAYERS        -->
+<!-- ============================================== -->
+<div id="parallax-1" class="parallax-layer"></div>
+<div id="parallax-2" class="parallax-layer"></div>
+<!-- ============================================== -->
+<!--  TOP NAVIGATION BAR (Apple-style center nav)   -->
+<!-- ============================================== -->
+
+<div id="top-nav" class="fade-in">
+    <div class="nav-btn nav-active" data-target="home">Start</div>
+    <div class="nav-btn" data-target="generator">Was soll ich tun?</div>
+    <div class="nav-btn" data-target="list">Was andere tun</div>
+    <div class="nav-btn" data-target="arcade">Arcade</div>
+    <div class="nav-btn" data-target="extras">Extras</div>
+</div>
+
+<!-- ============================================== -->
+<!--  SETTINGS BUTTON (top right)                   -->
+<!-- ============================================== -->
+
+<div id="settings-btn">⚙️</div>
+
+<!-- ============================================== -->
+<!--  PAGE SECTIONS                                 -->
+<!-- ============================================== -->
+
+<!-- HOME SECTION -->
+<div id="home" class="section active-section">
+    <h1 class="fade-in">Willkommen im Anti-Langeweile Hub</h1>
+
+    <div class="large-card fade-in" style="animation-delay: 0.1s;">
+        <p style="font-size:1.25rem;line-height:1.7;">
+            Dies ist die <b>Ultra-Deluxe Apple-Style Version</b> deiner Anti-Langeweile Website.
+            <br><br>
+            Links oben findest du eine Navigation zu allen Bereichen.
+            Rechts oben erreichst du ein mächtiges <b>Einstellungsmenü</b>.
+        </p>
+    </div>
+
+    <div class="large-card fade-in" style="animation-delay: 0.2s;">
+        <p style="font-size:1.25rem;line-height:1.7;">
+            Der Generator hilft dir, spannende Aktivitäten zu finden.
+            Das Arcade-Menü enthält <b>Doodle Jump Deluxe</b> und viele weitere Games.
+        </p>
+    </div>
+
+    <button class="button fade-in" style="animation-delay:0.3s;"
+        onclick="switchSection('generator')">➡️ Direkt zum Generator</button>
+</div>
+
+
+<!-- GENERATOR SECTION (IN TEIL 4) -->
+<div id="generator" class="section">
+    <h1>Was soll ich tun?</h1>
+    <!-- Inhalte folgen in Teil 4 -->
+</div>
+
+
+<!-- LIST SECTION (TEIL 3 & 4 erweitern den Inhalt) -->
+<div id="list" class="section">
+    <h1>Was andere so tun</h1>
+
+    <div class="large-card fade-in">
+        <p>Beispiele, Inspirationen und realistische Ideen folgen in einem späteren Teil.</p>
+    </div>
+</div>
+
+
+<!-- ARCADE SECTION (GRUNDGERÜST, TEIL 5 UND 6 BAUEN AUS) -->
+<div id="arcade" class="section">
+    <h1>Arcade</h1>
+
+    <div class="large-card fade-in">
+        <p>Hier entsteht dein komplettes <b>Arcade-Hub</b> mit vielen Minigames.</p>
+        <p style="margin-top:10px;">In späteren Teilen wird dies gefüllt mit:</p>
+        <ul style="margin-left:20px;margin-top:10px;">
+            <li>Doodle Jump Deluxe</li>
+            <li>Flappy Square Deluxe</li>
+            <li>Snake HD</li>
+            <li>Pong</li>
+            <li>2048</li>
+            <li>Breakout</li>
+            <li>Memory</li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- EXTRAS SECTION -->
+<div id="extras" class="section">
+    <h1>Extras</h1>
+
+    <div class="large-card fade-in">
+        <p>Hier entsteht Platz für zukünftige Erweiterungen, Themes, Easter Eggs usw.</p>
+    </div>
+</div>
+
+
+<!-- ============================================== -->
+<!--  PAGE TRANSITION & NAVIGATION JS ENGINE        -->
+<!-- ============================================== -->
+<script>
+
+const navButtons = document.querySelectorAll(".nav-btn");
+const sections = document.querySelectorAll(".section");
+
+// --------------------------------------------------------------
+// Navigation click handler
+// --------------------------------------------------------------
+navButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-target");
+        switchSection(target);
+
+        navButtons.forEach(b => b.classList.remove("nav-active"));
+        btn.classList.add("nav-active");
+    });
+});
+
+// --------------------------------------------------------------
+// Smooth Apple-style section switch
+// --------------------------------------------------------------
+function switchSection(id) {
+    sections.forEach(sec => sec.classList.remove("active-section"));
+    const newSec = document.getElementById(id);
+    newSec.classList.add("active-section");
+
+    newSec.classList.remove("fade-in");
+    void newSec.offsetWidth;
+    newSec.classList.add("fade-in");
+}
+
+// --------------------------------------------------------------
+// Parallax engine (Apple subtle motion)
+// --------------------------------------------------------------
+document.addEventListener("mousemove", e => {
+    const x = (e.clientX / window.innerWidth) - 0.5;
+    const y = (e.clientY / window.innerHeight) - 0.5;
+
+    document.querySelectorAll(".parallax-layer").forEach((layer, i) => {
+        const depth = (i + 1) * 10;
+        layer.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+    });
+});
+
+// --------------------------------------------------------------
+// Settings Button
+// (Settings Panel erscheint in Teil 3)
+// --------------------------------------------------------------
+document.getElementById("settings-btn").addEventListener("click", () => {
+    toggleSettingsPanel();
+});
+
+</script>
+
+<!-- END OF PART 2 -->
+<!-- ============================================== -->
+<!--  SETTINGS PANEL                                 -->
+<!-- ============================================== -->
+<div id="settings-panel" style="display:none;">
+    <div class="large-card" style="position:fixed;top:50%;right:-400px;width:350px;max-width:80%;height:90%;transform:translateY(-50%);z-index:3000;transition:var(--ts);overflow-y:auto;backdrop-filter:blur(24px);background:var(--glass);padding:20px;">
+        <h2 style="margin-bottom:20px;text-align:center;">Einstellungen</h2>
+        
+        <!-- Name Eingabe -->
+        <div style="margin-bottom:20px;">
+            <label for="user-name" style="font-weight:600;">Dein Name:</label>
+            <input type="text" id="user-name" placeholder="Name eingeben" style="width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;outline:none;background:rgba(255,255,255,0.25);color:var(--fg);backdrop-filter:blur(12px);">
+        </div>
+        
+        <!-- Dark/Light Mode -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Theme:</label>
+            <div style="margin-top:6px;display:flex;gap:12px;">
+                <button class="button" id="light-mode-btn">🌞 Hell</button>
+                <button class="button" id="dark-mode-btn">🌙 Dunkel</button>
+            </div>
+        </div>
+        
+        <!-- Hobbys (Generator beeinflusst) -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Hobbys & Interessen:</label>
+            <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;">
+                <button class="small-btn" data-hobby="Sport">Sport</button>
+                <button class="small-btn" data-hobby="Gaming">Gaming</button>
+                <button class="small-btn" data-hobby="Kreativ">Kreativ</button>
+                <button class="small-btn" data-hobby="Musik">Musik</button>
+                <button class="small-btn" data-hobby="Kochen">Kochen</button>
+                <button class="small-btn" data-hobby="Lesen">Lesen</button>
+                <button class="small-btn" data-hobby="Natur">Natur</button>
+                <button class="small-btn" data-hobby="Technik">Technik</button>
+            </div>
+        </div>
+        
+        <!-- Animationstiefe -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Animationstiefe:</label>
+            <input type="range" min="0" max="10" step="1" id="animation-depth" value="5" style="width:100%; margin-top:6px;">
+        </div>
+        
+        <!-- Schriftart Auswahl -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Schriftart:</label>
+            <select id="font-select" style="width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;background:rgba(255,255,255,0.25);color:var(--fg);backdrop-filter:blur(12px);">
+                <option value="Inter, Helvetica, sans-serif">Inter (Standard)</option>
+                <option value="SF Pro Display, Helvetica, sans-serif">SF Pro Display</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Comic Sans MS, cursive, sans-serif">Comic Sans</option>
+            </select>
+        </div>
+        
+        <!-- Farbschema (Accent) -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Accent-Farbe:</label>
+            <input type="color" id="accent-color" value="#007aff" style="width:100%;margin-top:6px;height:40px;border:none;border-radius:10px;cursor:pointer;">
+        </div>
+        
+        <!-- Sounds aktivieren/deaktivieren -->
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:600;">Sound-Effekte:</label>
+            <div style="margin-top:6px;display:flex;gap:12px;">
+                <button class="button" id="sound-on-btn">🔊 An</button>
+                <button class="button" id="sound-off-btn">🔇 Aus</button>
+            </div>
+        </div>
+        
+        <!-- Settings schließen -->
+        <div style="text-align:center;margin-top:20px;">
+            <button class="button" id="close-settings-btn">Schließen</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================== -->
+<!--  SETTINGS PANEL JS                               -->
+<!-- ============================================== -->
+<script>
+const settingsPanel = document.getElementById("settings-panel");
+let settingsOpen = false;
+
+function toggleSettingsPanel() {
+    const panel = settingsPanel.querySelector("div");
+    if (!settingsOpen) {
+        panel.style.right = "20px";
+        settingsOpen = true;
+    } else {
+        panel.style.right = "-400px";
+        settingsOpen = false;
+    }
+}
+
+// Close button
+document.getElementById("close-settings-btn").addEventListener("click", toggleSettingsPanel);
+
+// -----------------------
+// Dark/Light Mode
+// -----------------------
+const root = document.documentElement;
+document.getElementById("light-mode-btn").addEventListener("click", () => {
+    root.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+});
+document.getElementById("dark-mode-btn").addEventListener("click", () => {
+    root.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+});
+
+// Load theme from storage
+if (localStorage.getItem("theme") === "dark") {
+    root.classList.add("dark");
+} else {
+    root.classList.remove("dark");
+}
+
+// -----------------------
+// User Name
+// -----------------------
+const userNameInput = document.getElementById("user-name");
+userNameInput.addEventListener("input", () => {
+    localStorage.setItem("username", userNameInput.value);
+});
+
+// Load name
+if (localStorage.getItem("username")) {
+    userNameInput.value = localStorage.getItem("username");
+}
+
+// -----------------------
+// Hobbys selection
+// -----------------------
+const hobbyButtons = document.querySelectorAll(".small-btn");
+let selectedHobbies = [];
+
+hobbyButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const hobby = btn.getAttribute("data-hobby");
+        if (selectedHobbies.includes(hobby)) {
+            selectedHobbies = selectedHobbies.filter(h => h !== hobby);
+            btn.style.background = "";
+        } else {
+            selectedHobbies.push(hobby);
+            btn.style.background = "var(--accent)";
+            btn.style.color = "#fff";
+        }
+        localStorage.setItem("hobbies", JSON.stringify(selectedHobbies));
+    });
+});
+
+// Load hobbies
+if (localStorage.getItem("hobbies")) {
+    selectedHobbies = JSON.parse(localStorage.getItem("hobbies"));
+    hobbyButtons.forEach(btn => {
+        const hobby = btn.getAttribute("data-hobby");
+        if (selectedHobbies.includes(hobby)) {
+            btn.style.background = "var(--accent)";
+            btn.style.color = "#fff";
+        }
+    });
+}
+
+// -----------------------
+// Animation Depth
+// -----------------------
+const animDepth = document.getElementById("animation-depth");
+animDepth.addEventListener("input", () => {
+    localStorage.setItem("animationDepth", animDepth.value);
+});
+
+// Load animation depth
+if (localStorage.getItem("animationDepth")) {
+    animDepth.value = localStorage.getItem("animationDepth");
+}
+
+// -----------------------
+// Font Selection
+// -----------------------
+const fontSelect = document.getElementById("font-select");
+fontSelect.addEventListener("change", () => {
+    document.body.style.fontFamily = fontSelect.value;
+    localStorage.setItem("font", fontSelect.value);
+});
+// Load font
+if (localStorage.getItem("font")) {
+    fontSelect.value = localStorage.getItem("font");
+    document.body.style.fontFamily = fontSelect.value;
+}
+
+// -----------------------
+// Accent color
+// -----------------------
+const accentInput = document.getElementById("accent-color");
+accentInput.addEventListener("input", () => {
+    root.style.setProperty("--accent", accentInput.value);
+    localStorage.setItem("accent", accentInput.value);
+});
+// Load accent
+if (localStorage.getItem("accent")) {
+    const color = localStorage.getItem("accent");
+    accentInput.value = color;
+    root.style.setProperty("--accent", color);
+}
+
+// -----------------------
+// Sounds On/Off (placeholder)
+// -----------------------
+let soundEnabled = true;
+document.getElementById("sound-on-btn").addEventListener("click", () => {
+    soundEnabled = true;
+    localStorage.setItem("soundEnabled", "true");
+});
+document.getElementById("sound-off-btn").addEventListener("click", () => {
+    soundEnabled = false;
+    localStorage.setItem("soundEnabled", "false");
+});
+// Load sound setting
+if (localStorage.getItem("soundEnabled") === "false") soundEnabled = false;
+
+</script>
+
+<!-- END OF PART 3 -->
+<!-- ============================================== -->
+<!--  WAS-SOLL-ICH-TUN GENERATOR                     -->
+<!-- ============================================== -->
+<script>
+// -----------------------
+// Activity Generator Core
+// -----------------------
+const generatorSection = document.getElementById("generator");
+
+const activityPool = {
+    "Sport": ["Spazieren gehen", "Joggen im Park", "Fahrrad fahren", "Yoga-Session"],
+    "Gaming": ["Neues Indie-Spiel ausprobieren", "Highscore knacken", "Online-Match spielen"],
+    "Kreativ": ["Zeichnen", "Malen", "Bastelprojekt starten", "DIY Möbel bauen"],
+    "Musik": ["Ein Instrument spielen", "Neue Playlist erstellen", "Song komponieren"],
+    "Kochen": ["Neues Rezept ausprobieren", "Smoothie mixen", "Backen"],
+    "Lesen": ["Buch weiterlesen", "Artikel online lesen", "Kurzgeschichte schreiben"],
+    "Natur": ["Waldspaziergang", "Vogel beobachten", "Fotografie draußen"],
+    "Technik": ["Gadget ausprobieren", "Programmierchallenge", "Tech-News lesen"],
+    "Allgemein": ["Meditation", "Freunde anrufen", "Online-Kurs starten", "Puzzle lösen"]
+};
+
+let userHobbies = JSON.parse(localStorage.getItem("hobbies")) || [];
+if(userHobbies.length === 0) userHobbies.push("Allgemein");
+
+const userName = localStorage.getItem("username") || "Freund";
+
+// -----------------------
+// Generator Card
+// -----------------------
+const genCard = document.createElement("div");
+genCard.className = "large-card fade-scale";
+genCard.style.textAlign = "center";
+genCard.style.fontSize = "1.5rem";
+genCard.style.minHeight = "120px";
+genCard.style.display = "flex";
+genCard.style.alignItems = "center";
+genCard.style.justifyContent = "center";
+genCard.style.flexDirection = "column";
+generatorSection.appendChild(genCard);
+
+// -----------------------
+// Generate Button
+// -----------------------
+const genButton = document.createElement("button");
+genButton.className = "button fade-scale";
+genButton.style.marginTop = "20px";
+genButton.innerText = "🎲 Neue Aktivität generieren";
+generatorSection.appendChild(genButton);
+
+// -----------------------
+// Activity Generation
+// -----------------------
+function generateActivity() {
+    let chosenHobby = userHobbies[Math.floor(Math.random() * userHobbies.length)];
+    let pool = activityPool[chosenHobby] || activityPool["Allgemein"];
+    let activity = pool[Math.floor(Math.random() * pool.length)];
+    genCard.innerHTML = `Hallo ${userName}!<br><span style="font-weight:600;">Wie wär's mit:</span><br>✨ ${activity} ✨`;
+
+    // Fancy animation
+    genCard.style.transform = "scale(0.95)";
+    setTimeout(() => { genCard.style.transform = "scale(1)"; }, 80);
+}
+
+// -----------------------
+// Initial Greeting
+// -----------------------
+genCard.innerHTML = `Hallo ${userName}!<br>Klicke auf den Button, um etwas Spannendes zu tun!`;
+
+// -----------------------
+// Button Event
+// -----------------------
+genButton.addEventListener("click", () => {
+    generateActivity();
+    if(window.soundEnabled) playClickSound();
+});
+
+// -----------------------
+// Optional Sound
+// -----------------------
+function playClickSound() {
+    const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=");
+    audio.play();
+}
+</script>
+
+<!-- END OF PART 4 -->
+<!-- ============================================== -->
+<!--  ARCADE HUB / MINIGAMES                        -->
+<!-- ============================================== -->
+
+<script>
+// -----------------------
+// Arcade Container
+// -----------------------
+const arcadeSection = document.getElementById("arcade");
+
+// Game Selector Buttons
+const games = ["DoodleJump", "FlappySquare", "Snake", "Pong", "Breakout", "Memory"];
+const gameButtonsDiv = document.createElement("div");
+gameButtonsDiv.style.display = "flex";
+gameButtonsDiv.style.flexWrap = "wrap";
+gameButtonsDiv.style.gap = "12px";
+gameButtonsDiv.style.marginTop = "20px";
+arcadeSection.appendChild(gameButtonsDiv);
+
+games.forEach(game => {
+    const btn = document.createElement("button");
+    btn.className = "button fade-scale";
+    btn.innerText = game;
+    btn.addEventListener("click", () => launchGame(game));
+    gameButtonsDiv.appendChild(btn);
+});
+
+// -----------------------
+// Game Canvas / Area
+// -----------------------
+const gameContainer = document.createElement("div");
+gameContainer.id = "game-container";
+gameContainer.style.marginTop = "30px";
+gameContainer.style.width = "100%";
+gameContainer.style.height = "500px";
+gameContainer.style.background = "var(--glass)";
+gameContainer.style.borderRadius = "18px";
+gameContainer.style.boxShadow = "var(--shadow)";
+gameContainer.style.position = "relative";
+arcadeSection.appendChild(gameContainer);
+
+// -----------------------
+// Launch Game Handler
+// -----------------------
+function launchGame(game) {
+    gameContainer.innerHTML = ""; // Clear previous game
+    if(game === "DoodleJump") {
+        initDoodleJump();
+    } else {
+        const placeholder = document.createElement("div");
+        placeholder.style.width = "100%";
+        placeholder.style.height = "100%";
+        placeholder.style.display = "flex";
+        placeholder.style.alignItems = "center";
+        placeholder.style.justifyContent = "center";
+        placeholder.style.fontSize = "1.5rem";
+        placeholder.innerText = `${game} wird bald hier spielbar sein!`;
+        gameContainer.appendChild(placeholder);
+    }
+}
+
+// -----------------------
+// DOODLE JUMP DELUXE
+// -----------------------
+function initDoodleJump() {
+    const canvas = document.createElement("canvas");
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
+    canvas.style.borderRadius = "18px";
+    gameContainer.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    // -----------------------
+    // Game Variables
+    // -----------------------
+    let player = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, vy: 0 };
+    let platforms = [];
+    let gravity = 0.6;
+    let jumpStrength = -12;
+    let score = 0;
+
+    // Generate initial platforms
+    for(let i=0;i<8;i++){
+        platforms.push({
+            x: Math.random()*(canvas.width-100),
+            y: canvas.height - i*100,
+            w: 100,
+            h: 15
+        });
+    }
+
+    // -----------------------
+    // Controls
+    // -----------------------
+    const keys = { left:false, right:false };
+    document.addEventListener("keydown", e => {
+        if(e.key==="ArrowLeft") keys.left=true;
+        if(e.key==="ArrowRight") keys.right=true;
+    });
+    document.addEventListener("keyup", e => {
+        if(e.key==="ArrowLeft") keys.left=false;
+        if(e.key==="ArrowRight") keys.right=false;
+    });
+
+    // -----------------------
+    // Game Loop
+    // -----------------------
+    function update() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // Player movement
+        if(keys.left) player.x -=6;
+        if(keys.right) player.x +=6;
+        player.vy += gravity;
+        player.y += player.vy;
+
+        // Wrap around sides
+        if(player.x > canvas.width) player.x = -player.w;
+        if(player.x < -player.w) player.x = canvas.width;
+
+        // Platforms collision
+        platforms.forEach(p => {
+            if(player.vy >0 && player.x + player.w > p.x && player.x < p.x + p.w && player.y + player.h > p.y && player.y + player.h < p.y + p.h + player.vy){
+                player.vy = jumpStrength;
+            }
+        });
+
+        // Scroll platforms and increase score
+        if(player.y < canvas.height/2){
+            platforms.forEach(p => { p.y -= player.vy; });
+            score -= player.vy;
+        }
+
+        // Draw platforms
+        ctx.fillStyle = "var(--accent)";
+        platforms.forEach(p => ctx.fillRect(p.x,p.y,p.w,p.h));
+
+        // Draw player
+        ctx.fillStyle = "var(--fg)";
+        ctx.fillRect(player.x,player.y,player.w,player.h);
+
+        // Add new platforms
+        platforms = platforms.filter(p=>p.y<canvas.height);
+        while(platforms.length<8){
+            platforms.push({
+                x: Math.random()*(canvas.width-100),
+                y: platforms[platforms.length-1].y - 100,
+                w: 100,
+                h: 15
+            });
+        }
+
+        // Game over
+        if(player.y>canvas.height){
+            ctx.fillStyle = "red";
+            ctx.font = "40px Arial";
+            ctx.fillText("Game Over!", canvas.width/2 - 100, canvas.height/2);
+            return;
+        }
+
+        // Score
+        ctx.fillStyle = "var(--fg)";
+        ctx.font = "20px Arial";
+        ctx.fillText("Score: "+Math.floor(score), 20,30);
+
+        requestAnimationFrame(update);
+    }
+    update();
+}
+
+// -----------------------
+// Responsive Canvas Resize
+// -----------------------
+window.addEventListener("resize", () => {
+    const canvas = gameContainer.querySelector("canvas");
+    if(canvas){
+        canvas.width = gameContainer.clientWidth;
+        canvas.height = gameContainer.clientHeight;
+    }
+});
+</script>
+
+<!-- END OF PART 5 -->
+<!-- ============================================== -->
+<!--  ARCADE HUB MINIGAMES ERWEITERUNG               -->
+<!-- ============================================== -->
+
+<script>
+// -----------------------
+// Flappy Square Deluxe
+// -----------------------
+function initFlappySquare() {
+    const canvas = document.createElement("canvas");
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
+    canvas.style.borderRadius = "18px";
+    gameContainer.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    let square = {x:50, y:canvas.height/2, w:30, h:30, vy:0};
+    let gravity = 0.7;
+    let jump = -12;
+    let pipes = [];
+    let frame=0;
+    let score =0;
+
+    function createPipe(){
+        let height = Math.random()*(canvas.height/2)+50;
+        pipes.push({x:canvas.width, y:0, w:50, h:height});
+        pipes.push({x:canvas.width, y:height+120, w:50, h:canvas.height-height-120});
+    }
+
+    function update(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // square movement
+        square.vy += gravity;
+        square.y += square.vy;
+
+        if(square.y+square.h>canvas.height) square.vy=0, square.y=canvas.height-square.h;
+
+        // draw square
+        ctx.fillStyle = "var(--fg)";
+        ctx.fillRect(square.x,square.y,square.w,square.h);
+
+        // pipes
+        if(frame%100===0) createPipe();
+        pipes.forEach(p=>{
+            p.x -=3;
+            ctx.fillStyle="var(--accent)";
+            ctx.fillRect(p.x,p.y,p.w,p.h);
+            // collision
+            if(square.x < p.x + p.w && square.x + square.w > p.x && square.y < p.y + p.h && square.y + square.h > p.y){
+                ctx.fillStyle="red";
+                ctx.font="40px Arial";
+                ctx.fillText("Game Over!", canvas.width/2 - 100, canvas.height/2);
+                return;
+            }
+            if(p.x + p.w === square.x) score++;
+        });
+        pipes = pipes.filter(p=>p.x+p.w>0);
+
+        // score
+        ctx.fillStyle = "var(--fg)";
+        ctx.font="20px Arial";
+        ctx.fillText("Score: "+score, 20,30);
+
+        frame++;
+        requestAnimationFrame(update);
+    }
+
+    document.addEventListener("keydown", e=>{
+        if(e.key===" " || e.key==="ArrowUp") square.vy=jump;
+    });
+
+    update();
+}
+
+// -----------------------
+// Snake Game
+// -----------------------
+function initSnake() {
+    const canvas = document.createElement("canvas");
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
+    canvas.style.borderRadius = "18px";
+    gameContainer.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    const tile=20;
+    let snake=[{x:10, y:10}];
+    let dir={x:1,y:0};
+    let food={x:Math.floor(Math.random()*canvas.width/tile),y:Math.floor(Math.random()*canvas.height/tile)};
+    let score=0;
+
+    function update(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // move snake
+        let head={x:snake[0].x+dir.x, y:snake[0].y+dir.y};
+
+        // wrap around
+        if(head.x<0) head.x=Math.floor(canvas.width/tile)-1;
+        if(head.x>=canvas.width/tile) head.x=0;
+        if(head.y<0) head.y=Math.floor(canvas.height/tile)-1;
+        if(head.y>=canvas.height/tile) head.y=0;
+
+        // collision self
+        for(let s of snake) if(s.x===head.x && s.y===head.y){
+            ctx.fillStyle="red";
+            ctx.font="40px Arial";
+            ctx.fillText("Game Over!", canvas.width/2 - 100, canvas.height/2);
+            return;
+        }
+
+        snake.unshift(head);
+
+        // eat food
+        if(head.x===food.x && head.y===food.y){
+            score++;
+            food={x:Math.floor(Math.random()*canvas.width/tile),y:Math.floor(Math.random()*canvas.height/tile)};
+        } else snake.pop();
+
+        // draw snake
+        ctx.fillStyle="var(--fg)";
+        snake.forEach(s=>ctx.fillRect(s.x*tile, s.y*tile, tile, tile));
+
+        // draw food
+        ctx.fillStyle="var(--accent)";
+        ctx.fillRect(food.x*tile, food.y*tile, tile, tile);
+
+        // score
+        ctx.fillStyle="var(--fg)";
+        ctx.font="20px Arial";
+        ctx.fillText("Score: "+score, 20,30);
+
+        requestAnimationFrame(update);
+    }
+
+    document.addEventListener("keydown", e=>{
+        if(e.key==="ArrowUp" && dir.y===0) dir={x:0,y:-1};
+        if(e.key==="ArrowDown" && dir.y===0) dir={x:0,y:1};
+        if(e.key==="ArrowLeft" && dir.x===0) dir={x:-1,y:0};
+        if(e.key==="ArrowRight" && dir.x===0) dir={x:1,y:0};
+    });
+
+    update();
+}
+
+// -----------------------
+// Pong Game
+// -----------------------
+function initPong() {
+    const canvas = document.createElement("canvas");
+    canvas.width = gameContainer.clientWidth;
+    canvas.height = gameContainer.clientHeight;
+    canvas.style.borderRadius = "18px";
+    gameContainer.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    let paddleHeight=100, paddleWidth=15;
+    let player={x:10, y:canvas.height/2 - paddleHeight/2};
+    let ai={x:canvas.width - paddleWidth - 10, y:canvas.height/2 - paddleHeight/2};
+    let ball={x:canvas.width/2, y:canvas.height/2, vx:4, vy:4, r:10};
+    let score=0;
+
+    function update(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // move player paddle
+        document.addEventListener("mousemove", e=>{
+            player.y = e.clientY - canvas.getBoundingClientRect().top - paddleHeight/2;
+        });
+
+        // move AI
+        if(ball.y>ai.y+ paddleHeight/2) ai.y +=3;
+        else ai.y -=3;
+
+        // move ball
+        ball.x += ball.vx; ball.y += ball.vy;
+
+        // collisions
+        if(ball.y - ball.r <0 || ball.y + ball.r >canvas.height) ball.vy*=-1;
+        if(ball.x - ball.r < player.x + paddleWidth && ball.y>player.y && ball.y<player.y+paddleHeight) ball.vx*=-1;
+        if(ball.x + ball.r > ai.x && ball.y>ai.y && ball.y<ai.y+paddleHeight) ball.vx*=-1;
+
+        // draw paddles
+        ctx.fillStyle="var(--fg)";
+        ctx.fillRect(player.x,player.y,paddleWidth,paddleHeight);
+        ctx.fillRect(ai.x,ai.y,paddleWidth,paddleHeight);
+
+        // draw ball
+        ctx.beginPath();
+        ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+        ctx.fillStyle="var(--accent)";
+        ctx.fill();
+
+        // score
+        ctx.fillStyle="var(--fg)";
+        ctx.font="20px Arial";
+        ctx.fillText("Score: "+score, 20,30);
+
+        requestAnimationFrame(update);
+    }
+
+    update();
+}
+</script>
+
+<!-- END OF PART 6 -->
+<!-- ============================================== -->
+<!--  EXTRAS, STYLES, FOOTER & EASTER EGGS         -->
+<!-- ============================================== -->
+
+<style>
+/* =========================== */
+/* Smooth transitions & animations */
+/* =========================== */
+.fade-scale {
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+    opacity: 1;
+}
+.fade-scale:hover {
+    transform: scale(1.02);
+}
+.large-card {
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border:none;
+    cursor:pointer;
+    transition: all 0.2s ease;
+    background: var(--accent);
+    color:#fff;
+}
+.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+.small-btn {
+    padding: 6px 12px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    transition: all 0.2s ease;
+    background: rgba(255,255,255,0.2);
+    color: var(--fg);
+}
+.small-btn:hover {
+    background: var(--accent);
+    color: #fff;
+}
+:root {
+    --bg:#ffffff;
+    --fg:#111111;
+    --accent:#007aff;
+    --glass: rgba(255,255,255,0.1);
+    --shadow: 0 8px 24px rgba(0,0,0,0.15);
+    --ts: all 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.dark {
+    --bg:#111111;
+    --fg:#f0f0f0;
+    --glass: rgba(20,20,20,0.5);
+    --shadow: 0 8px 24px rgba(0,0,0,0.7);
+}
+body {
+    margin:0;
+    padding:0;
+    font-family: Inter, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    transition: background 0.5s, color 0.5s;
+}
+#footer {
+    text-align:center;
+    padding:20px;
+    font-size:0.9rem;
+    color: var(--fg);
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+    margin-top:40px;
+}
+/* Easter Egg Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+.easter-egg {
+    position:fixed;
+    bottom:10px;
+    right:10px;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background: var(--accent);
+    cursor:pointer;
+    animation: float 2s infinite ease-in-out;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:bold;
+    z-index:5000;
+}
+</style>
+
+<!-- Footer -->
+<div id="footer">
+    © 2025 CoolBoredomHub. Alle Rechte vorbehalten. Made with ❤️ by ChatGPT.
+</div>
+
+<!-- Easter Egg -->
+<div class="easter-egg" title="Klicke mich!">🎉</div>
+<script>
+const egg = document.querySelector(".easter-egg");
+egg.addEventListener("click", ()=>{
+    alert("Glückwunsch! Du hast das Easter Egg gefunden! 🥳");
+    egg.style.background = "#ff4081";
+    egg.innerText="💎";
+    setTimeout(()=>{egg.style.background="var(--accent)"; egg.innerText="🎉";},2000);
+});
+
+// Floating animation on hover
+egg.addEventListener("mouseover", ()=>egg.style.transform="scale(1.2)");
+egg.addEventListener("mouseout", ()=>egg.style.transform="scale(1)");
+
+// Smooth page transitions for menu clicks
+const menuLinks = document.querySelectorAll("#menu button");
+menuLinks.forEach(link=>{
+    link.addEventListener("click", ()=>{
+        document.body.style.opacity=0;
+        setTimeout(()=>{document.body.style.opacity=1;},300);
+    });
+});
+
+// Initial fade-in animation
+document.addEventListener("DOMContentLoaded", ()=>{
+    document.body.style.opacity=0;
+    setTimeout(()=>{document.body.style.opacity=1;},100);
+});
+</script>
+
+<!-- END OF PART 7 -->
