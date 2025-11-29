@@ -1,681 +1,257 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>Anti-Langeweile Hub – Deluxe Edition</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ============================ -->
+<!--        TEIL 1/3             -->
+<!--   HEADER, MENÜ & SETTINGS    -->
+<!-- ============================ -->
 
-<!-- ============================================== -->
-<!--  GLOBAL APPLE-STYLE DESIGN & VARIABLES         -->
-<!-- ============================================== -->
 <style>
-
-/* --------------------------------------------------------------
-   Root Vars (Light Mode)
--------------------------------------------------------------- */
 :root {
-    /* Colors */
-    --bg: #f5f5f7;
-    --fg: #111;
-    --fg-soft: #333;
-    --accent: #007aff;
-    --accent-2: #5ac8fa;
-    --accent-3: #34c759;
-    --glass: rgba(255, 255, 255, 0.65);
-
-    /* Effects */
-    --blur: 24px;
-    --radius: 18px;
-    --shadow: 0 5px 40px rgba(0,0,0,0.12);
-
-    /* Transitions */
-    --ts: 0.4s cubic-bezier(.25,.8,.25,1);
-
-    /* Typography */
-    --font-ui: "Inter", "SF Pro Display", "SF Pro Text", Helvetica, sans-serif;
-
-    /* Layout */
-    --nav-height: 70px;
-
-    /* Animations */
-    --fade-time: 0.45s;
+    --bg:#fff;
+    --fg:#111;
+    --accent:#007aff;
+    --glass: rgba(255,255,255,0.1);
+    --shadow: 0 8px 24px rgba(0,0,0,0.15);
+    --ts: all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
-
-/* --------------------------------------------------------------
-   Root Vars (Dark Mode)
--------------------------------------------------------------- */
-:root.dark {
-    --bg: #0d0d0f;
-    --fg: #fafafa;
-    --fg-soft: #d4d4d4;
-    --glass: rgba(25, 25, 26, 0.55);
-    --shadow: 0 5px 40px rgba(0,0,0,0.6);
+.dark {
+    --bg:#111;
+    --fg:#f0f0f0;
+    --glass: rgba(20,20,20,0.5);
+    --shadow: 0 8px 24px rgba(0,0,0,0.7);
 }
-
-/* --------------------------------------------------------------
-   Base
--------------------------------------------------------------- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-}
-
 body {
-    font-family: var(--font-ui);
+    margin:0;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--fg);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    transition: background var(--ts), color var(--ts);
+    transition: background 0.5s, color 0.5s;
 }
-
-/* --------------------------------------------------------------
-   Page Fade-in
--------------------------------------------------------------- */
-body {
-    opacity: 0;
-    animation: fadeInPage var(--fade-time) forwards ease-out;
-}
-@keyframes fadeInPage {
-    to { opacity: 1; }
-}
-
-/* --------------------------------------------------------------
-   Smooth Scroll
--------------------------------------------------------------- */
-html {
-    scroll-behavior: smooth;
-}
-
-/* --------------------------------------------------------------
-   Apple-Style Scrollbar
--------------------------------------------------------------- */
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.15);
-    border-radius: 10px;
-}
-:root.dark ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
-}
-
-/* --------------------------------------------------------------
-   Glassmorphism Cards
--------------------------------------------------------------- */
-.glass {
+header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 20px;
+    position:sticky;
+    top:0;
     background: var(--glass);
-    backdrop-filter: blur(var(--blur));
-    -webkit-backdrop-filter: blur(var(--blur));
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-}
-
-/* --------------------------------------------------------------
-   Smooth Fade Animations
--------------------------------------------------------------- */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.7s forwards ease-out;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.fade-scale {
-    opacity: 0;
-    transform: scale(0.95);
-    animation: fadeScale 0.55s forwards ease-out;
-}
-@keyframes fadeScale {
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* --------------------------------------------------------------
-   Parallax Background engine
--------------------------------------------------------------- */
-.parallax-layer {
-    position: absolute;
-    width: 120%;
-    height: 120%;
-    top: -10%;
-    left: -10%;
-    pointer-events: none;
-    opacity: 0.07;
-    background-size: cover;
-    background-position: center;
-    transform: translateZ(0);
-}
-
-/* Light mode subtle layers */
-#parallax-1 { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDYwMCA2MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMzAwIiByPSIzMDAiIGZpbGw9IiNmZmYiIC8+PC9zdmc+'); }
-#parallax-2 { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDYwMCA2MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmZmYiIC8+PC9zdmc+'); }
-
-/* Dark mode variant lowers brightness */
-:root.dark .parallax-layer {
-    opacity: 0.05 !important;
-}
-
-/* --------------------------------------------------------------
-   Navigation (Apple-style)
--------------------------------------------------------------- */
-#top-nav {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: var(--nav-height);
-    padding: 10px 20px;
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    z-index: 2000;
-}
-
-.nav-btn {
-    padding: 10px 18px;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--ts);
-    user-select: none;
-    background: rgba(255,255,255,0.25);
     backdrop-filter: blur(12px);
-    color: var(--fg);
-}
-:root.dark .nav-btn {
-    background: rgba(30,30,30,0.4);
-}
-
-.nav-btn:hover {
-    transform: translateY(-2px);
-    background: var(--accent);
-    color: white;
-}
-
-.nav-active {
-    background: var(--accent) !important;
-    color: white !important;
-    transform: translateY(-2px);
-}
-
-/* --------------------------------------------------------------
-   Settings Button (top right)
--------------------------------------------------------------- */
-#settings-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 18px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(12px);
-    cursor: pointer;
+    z-index:1000;
     box-shadow: var(--shadow);
-    transition: var(--ts);
-    font-weight: 600;
-    z-index: 2000;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
 }
-:root.dark #settings-btn {
-    background: rgba(30,30,30,0.4);
-}
-
-#settings-btn:hover {
-    transform: scale(1.08);
-    background: var(--accent);
-    color: white;
-}
-
-/* --------------------------------------------------------------
-   Section Wrapper
--------------------------------------------------------------- */
-.section {
-    display: none;
-    padding: calc(var(--nav-height) + 60px) 5vw 80px 5vw;
-    min-height: calc(100vh - var(--nav-height));
-    animation: fadeIn var(--fade-time) ease-out;
-}
-
-.active-section {
-    display: block;
-}
-
-/* Placeholder styling for upcoming sections */
-.section h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Extra global button style */
 .button {
-    padding: 14px 24px;
-    border: none;
-    border-radius: 14px;
+    padding:10px 20px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    transition: all 0.2s ease;
     background: var(--accent);
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: var(--ts);
+    color:#fff;
 }
 .button:hover {
-    transform: translateY(-3px);
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
-
-/* Large cards for Apple-style UI */
-.large-card {
-    padding: 26px;
-    border-radius: var(--radius);
-    margin-bottom: 24px;
+.card {
     background: var(--glass);
-    backdrop-filter: blur(var(--blur));
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom:20px;
     box-shadow: var(--shadow);
-    transition: var(--ts);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.large-card:hover {
-    transform: translateY(-4px);
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.3);
 }
-
-/* End of PART 1 */
+#settings-panel {
+    position:absolute;
+    top:60px;
+    right:20px;
+    width:350px;
+    background:var(--glass);
+    border-radius:12px;
+    padding:20px;
+    box-shadow: var(--shadow);
+    display:none;
+    z-index:9999;
+    transition:all 0.4s ease;
+}
+input, select {
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    background:rgba(255,255,255,0.2);
+    color: var(--fg);
+}
 </style>
-</head>
-<body>
 
-<!-- ============================================== -->
-<!--  APPLE-STYLE PARALLAX BACKGROUND LAYERS        -->
-<!-- ============================================== -->
-<div id="parallax-1" class="parallax-layer"></div>
-<div id="parallax-2" class="parallax-layer"></div>
-<!-- ============================================== -->
-<!--  TOP NAVIGATION BAR (Apple-style center nav)   -->
-<!-- ============================================== -->
+<header>
+    <div id="menu">
+        <button class="button" data-target="generator">Generator</button>
+        <button class="button" data-target="overview">Übersicht</button>
+        <button class="button" data-target="arcade">Minigames</button>
+        <button class="button" data-target="extras">Extras</button>
+    </div>
+    <div>
+        <button id="settings-btn" class="button">⚙️ Einstellungen</button>
+    </div>
+</header>
 
-<div id="top-nav" class="fade-in">
-    <div class="nav-btn nav-active" data-target="home">Start</div>
-    <div class="nav-btn" data-target="generator">Was soll ich tun?</div>
-    <div class="nav-btn" data-target="list">Was andere tun</div>
-    <div class="nav-btn" data-target="arcade">Arcade</div>
-    <div class="nav-btn" data-target="extras">Extras</div>
+<div id="settings-panel">
+    <h3>Einstellungen</h3>
+    <label>
+        Name: <input type="text" id="username-input" placeholder="Dein Name">
+    </label>
+    <label>
+        Hobbys auswählen:
+        <select id="hobbies-select" multiple size="5">
+            <option value="Sport">Sport</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Kreativ">Kreativ</option>
+            <option value="Musik">Musik</option>
+            <option value="Kochen">Kochen</option>
+            <option value="Lesen">Lesen</option>
+            <option value="Natur">Natur</option>
+            <option value="Technik">Technik</option>
+        </select>
+    </label>
+    <label>
+        <input type="checkbox" id="darkmode-toggle"> Dunkelmodus
+    </label>
+    <button id="save-settings" class="button">Speichern</button>
 </div>
 
-<!-- ============================================== -->
-<!--  SETTINGS BUTTON (top right)                   -->
-<!-- ============================================== -->
+<!-- ============================ -->
+<!--        TEIL 2/3             -->
+<!--       SEKTIONEN              -->
+<!-- ============================ -->
 
-<div id="settings-btn">⚙️</div>
-
-<!-- ============================================== -->
-<!--  PAGE SECTIONS                                 -->
-<!-- ============================================== -->
-
-<!-- HOME SECTION -->
-<div id="home" class="section active-section">
-    <h1 class="fade-in">Willkommen im Anti-Langeweile Hub</h1>
-
-    <div class="large-card fade-in" style="animation-delay: 0.1s;">
-        <p style="font-size:1.25rem;line-height:1.7;">
-            Dies ist die <b>Ultra-Deluxe Apple-Style Version</b> deiner Anti-Langeweile Website.
-            <br><br>
-            Links oben findest du eine Navigation zu allen Bereichen.
-            Rechts oben erreichst du ein mächtiges <b>Einstellungsmenü</b>.
-        </p>
-    </div>
-
-    <div class="large-card fade-in" style="animation-delay: 0.2s;">
-        <p style="font-size:1.25rem;line-height:1.7;">
-            Der Generator hilft dir, spannende Aktivitäten zu finden.
-            Das Arcade-Menü enthält <b>Doodle Jump Deluxe</b> und viele weitere Games.
-        </p>
-    </div>
-
-    <button class="button fade-in" style="animation-delay:0.3s;"
-        onclick="switchSection('generator')">➡️ Direkt zum Generator</button>
-</div>
-
-
-<!-- GENERATOR SECTION (IN TEIL 4) -->
-<div id="generator" class="section">
+<div id="generator" class="card" style="display:block; padding:40px;">
     <h1>Was soll ich tun?</h1>
-    <!-- Inhalte folgen in Teil 4 -->
+    <p id="generator-output">Drücke den Button, um eine Idee zu bekommen!</p>
+    <button class="button" id="generate-btn">Generieren</button>
 </div>
 
-
-<!-- LIST SECTION (TEIL 3 & 4 erweitern den Inhalt) -->
-<div id="list" class="section">
-    <h1>Was andere so tun</h1>
-
-    <div class="large-card fade-in">
-        <p>Beispiele, Inspirationen und realistische Ideen folgen in einem späteren Teil.</p>
-    </div>
+<div id="overview" class="card" style="display:none; padding:40px;">
+    <h1>Übersicht: Was andere so tun</h1>
+    <ul>
+        <li>Lesen von Büchern</li>
+        <li>Spaziergänge in der Natur</li>
+        <li>Kreatives Malen</li>
+        <li>Videospiele spielen</li>
+        <li>Kochen & Backen</li>
+        <li>Musik hören oder machen</li>
+    </ul>
 </div>
 
-
-<!-- ARCADE SECTION (GRUNDGERÜST, TEIL 5 UND 6 BAUEN AUS) -->
-<div id="arcade" class="section">
-    <h1>Arcade</h1>
-
-    <div class="large-card fade-in">
-        <p>Hier entsteht dein komplettes <b>Arcade-Hub</b> mit vielen Minigames.</p>
-        <p style="margin-top:10px;">In späteren Teilen wird dies gefüllt mit:</p>
-        <ul style="margin-left:20px;margin-top:10px;">
-            <li>Doodle Jump Deluxe</li>
-            <li>Flappy Square Deluxe</li>
-            <li>Snake HD</li>
-            <li>Pong</li>
-            <li>2048</li>
-            <li>Breakout</li>
-            <li>Memory</li>
-        </ul>
-    </div>
+<div id="arcade" class="card" style="display:none; padding:40px;">
+    <h1>Minigames</h1>
+    <p>Wähle ein Spiel aus dem Arcade-Hub!</p>
 </div>
 
-
-<!-- EXTRAS SECTION -->
-<div id="extras" class="section">
+<div id="extras" class="card" style="display:none; padding:40px;">
     <h1>Extras</h1>
-
-    <div class="large-card fade-in">
-        <p>Hier entsteht Platz für zukünftige Erweiterungen, Themes, Easter Eggs usw.</p>
-    </div>
+    <p>Hier findest du zusätzliche Funktionen & kleine Easter Eggs!</p>
 </div>
 
+<!-- ============================ -->
+<!--        TEIL 3/3             -->
+<!--      MENÜ & SETTINGS JS      -->
+<!-- ============================ -->
 
-<!-- ============================================== -->
-<!--  PAGE TRANSITION & NAVIGATION JS ENGINE        -->
-<!-- ============================================== -->
 <script>
+// ------------------------
+// Menü-Logik
+// ------------------------
+const menuButtons = document.querySelectorAll("#menu button");
+const sections = {
+    generator: document.getElementById("generator"),
+    overview: document.getElementById("overview"),
+    arcade: document.getElementById("arcade"),
+    extras: document.getElementById("extras")
+};
 
-const navButtons = document.querySelectorAll(".nav-btn");
-const sections = document.querySelectorAll(".section");
-
-// --------------------------------------------------------------
-// Navigation click handler
-// --------------------------------------------------------------
-navButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const target = btn.getAttribute("data-target");
-        switchSection(target);
-
-        navButtons.forEach(b => b.classList.remove("nav-active"));
-        btn.classList.add("nav-active");
+menuButtons.forEach(btn => {
+    btn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        Object.values(sections).forEach(sec => sec.style.display="none");
+        const target = btn.dataset.target;
+        if(sections[target]) sections[target].style.display="block";
     });
 });
 
-// --------------------------------------------------------------
-// Smooth Apple-style section switch
-// --------------------------------------------------------------
-function switchSection(id) {
-    sections.forEach(sec => sec.classList.remove("active-section"));
-    const newSec = document.getElementById(id);
-    newSec.classList.add("active-section");
-
-    newSec.classList.remove("fade-in");
-    void newSec.offsetWidth;
-    newSec.classList.add("fade-in");
-}
-
-// --------------------------------------------------------------
-// Parallax engine (Apple subtle motion)
-// --------------------------------------------------------------
-document.addEventListener("mousemove", e => {
-    const x = (e.clientX / window.innerWidth) - 0.5;
-    const y = (e.clientY / window.innerHeight) - 0.5;
-
-    document.querySelectorAll(".parallax-layer").forEach((layer, i) => {
-        const depth = (i + 1) * 10;
-        layer.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
-    });
-});
-
-// --------------------------------------------------------------
-// Settings Button
-// (Settings Panel erscheint in Teil 3)
-// --------------------------------------------------------------
-document.getElementById("settings-btn").addEventListener("click", () => {
-    toggleSettingsPanel();
-});
-
-</script>
-
-<!-- END OF PART 2 -->
-<!-- ============================================== -->
-<!--  SETTINGS PANEL                                 -->
-<!-- ============================================== -->
-<div id="settings-panel" style="display:none;">
-    <div class="large-card" style="position:fixed;top:50%;right:-400px;width:350px;max-width:80%;height:90%;transform:translateY(-50%);z-index:3000;transition:var(--ts);overflow-y:auto;backdrop-filter:blur(24px);background:var(--glass);padding:20px;">
-        <h2 style="margin-bottom:20px;text-align:center;">Einstellungen</h2>
-        
-        <!-- Name Eingabe -->
-        <div style="margin-bottom:20px;">
-            <label for="user-name" style="font-weight:600;">Dein Name:</label>
-            <input type="text" id="user-name" placeholder="Name eingeben" style="width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;outline:none;background:rgba(255,255,255,0.25);color:var(--fg);backdrop-filter:blur(12px);">
-        </div>
-        
-        <!-- Dark/Light Mode -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Theme:</label>
-            <div style="margin-top:6px;display:flex;gap:12px;">
-                <button class="button" id="light-mode-btn">🌞 Hell</button>
-                <button class="button" id="dark-mode-btn">🌙 Dunkel</button>
-            </div>
-        </div>
-        
-        <!-- Hobbys (Generator beeinflusst) -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Hobbys & Interessen:</label>
-            <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;">
-                <button class="small-btn" data-hobby="Sport">Sport</button>
-                <button class="small-btn" data-hobby="Gaming">Gaming</button>
-                <button class="small-btn" data-hobby="Kreativ">Kreativ</button>
-                <button class="small-btn" data-hobby="Musik">Musik</button>
-                <button class="small-btn" data-hobby="Kochen">Kochen</button>
-                <button class="small-btn" data-hobby="Lesen">Lesen</button>
-                <button class="small-btn" data-hobby="Natur">Natur</button>
-                <button class="small-btn" data-hobby="Technik">Technik</button>
-            </div>
-        </div>
-        
-        <!-- Animationstiefe -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Animationstiefe:</label>
-            <input type="range" min="0" max="10" step="1" id="animation-depth" value="5" style="width:100%; margin-top:6px;">
-        </div>
-        
-        <!-- Schriftart Auswahl -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Schriftart:</label>
-            <select id="font-select" style="width:100%;padding:10px;margin-top:6px;border-radius:10px;border:none;background:rgba(255,255,255,0.25);color:var(--fg);backdrop-filter:blur(12px);">
-                <option value="Inter, Helvetica, sans-serif">Inter (Standard)</option>
-                <option value="SF Pro Display, Helvetica, sans-serif">SF Pro Display</option>
-                <option value="Arial, sans-serif">Arial</option>
-                <option value="Comic Sans MS, cursive, sans-serif">Comic Sans</option>
-            </select>
-        </div>
-        
-        <!-- Farbschema (Accent) -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Accent-Farbe:</label>
-            <input type="color" id="accent-color" value="#007aff" style="width:100%;margin-top:6px;height:40px;border:none;border-radius:10px;cursor:pointer;">
-        </div>
-        
-        <!-- Sounds aktivieren/deaktivieren -->
-        <div style="margin-bottom:20px;">
-            <label style="font-weight:600;">Sound-Effekte:</label>
-            <div style="margin-top:6px;display:flex;gap:12px;">
-                <button class="button" id="sound-on-btn">🔊 An</button>
-                <button class="button" id="sound-off-btn">🔇 Aus</button>
-            </div>
-        </div>
-        
-        <!-- Settings schließen -->
-        <div style="text-align:center;margin-top:20px;">
-            <button class="button" id="close-settings-btn">Schließen</button>
-        </div>
-    </div>
-</div>
-
-<!-- ============================================== -->
-<!--  SETTINGS PANEL JS                               -->
-<!-- ============================================== -->
-<script>
+// ------------------------
+// Settings-Panel Logik
+// ------------------------
+const settingsBtn = document.getElementById("settings-btn");
 const settingsPanel = document.getElementById("settings-panel");
-let settingsOpen = false;
 
-function toggleSettingsPanel() {
-    const panel = settingsPanel.querySelector("div");
-    if (!settingsOpen) {
-        panel.style.right = "20px";
-        settingsOpen = true;
-    } else {
-        panel.style.right = "-400px";
-        settingsOpen = false;
-    }
-}
+settingsBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    settingsPanel.style.display = settingsPanel.style.display==="block" ? "none" : "block";
+});
 
-// Close button
-document.getElementById("close-settings-btn").addEventListener("click", toggleSettingsPanel);
+// Klick außerhalb schließt Panel
+document.addEventListener("click", ()=>{
+    settingsPanel.style.display="none";
+});
+settingsPanel.addEventListener("click",(e)=>e.stopPropagation());
 
-// -----------------------
+// ------------------------
 // Dark/Light Mode
-// -----------------------
-const root = document.documentElement;
-document.getElementById("light-mode-btn").addEventListener("click", () => {
-    root.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-});
-document.getElementById("dark-mode-btn").addEventListener("click", () => {
-    root.classList.add("dark");
-    localStorage.setItem("theme", "dark");
+// ------------------------
+const darkToggle = document.getElementById("darkmode-toggle");
+darkToggle.addEventListener("change", ()=>{
+    if(darkToggle.checked) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
 });
 
-// Load theme from storage
-if (localStorage.getItem("theme") === "dark") {
-    root.classList.add("dark");
-} else {
-    root.classList.remove("dark");
-}
+// ------------------------
+// Username & Hobbies speichern
+// ------------------------
+const saveBtn = document.getElementById("save-settings");
+saveBtn.addEventListener("click", ()=>{
+    const username = document.getElementById("username-input").value || "Freund";
+    localStorage.setItem("username", username);
 
-// -----------------------
-// User Name
-// -----------------------
-const userNameInput = document.getElementById("user-name");
-userNameInput.addEventListener("input", () => {
-    localStorage.setItem("username", userNameInput.value);
+    const hobbiesSelect = document.getElementById("hobbies-select");
+    const selectedHobbies = Array.from(hobbiesSelect.selectedOptions).map(o=>o.value);
+    localStorage.setItem("hobbies", JSON.stringify(selectedHobbies.length>0 ? selectedHobbies : ["Allgemein"]));
+
+    alert("Einstellungen gespeichert!");
+    settingsPanel.style.display="none";
 });
 
-// Load name
-if (localStorage.getItem("username")) {
-    userNameInput.value = localStorage.getItem("username");
-}
+// ------------------------
+// Generator Button
+// ------------------------
+const generateBtn = document.getElementById("generate-btn");
+const generatorOutput = document.getElementById("generator-output");
 
-// -----------------------
-// Hobbys selection
-// -----------------------
-const hobbyButtons = document.querySelectorAll(".small-btn");
-let selectedHobbies = [];
-
-hobbyButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const hobby = btn.getAttribute("data-hobby");
-        if (selectedHobbies.includes(hobby)) {
-            selectedHobbies = selectedHobbies.filter(h => h !== hobby);
-            btn.style.background = "";
-        } else {
-            selectedHobbies.push(hobby);
-            btn.style.background = "var(--accent)";
-            btn.style.color = "#fff";
-        }
-        localStorage.setItem("hobbies", JSON.stringify(selectedHobbies));
-    });
+generateBtn.addEventListener("click", ()=>{
+    const hobbies = JSON.parse(localStorage.getItem("hobbies") || '["Allgemein"]');
+    const ideas = {
+        Sport: ["Spaziergang", "Joggen", "Radfahren"],
+        Gaming: ["Ein neues Indie-Spiel testen", "Speedrun üben"],
+        Kreativ: ["Malen", "Schreiben", "Basteln"],
+        Musik: ["Ein Instrument spielen", "Neue Playlist erstellen"],
+        Kochen: ["Ein neues Rezept ausprobieren", "Kuchen backen"],
+        Lesen: ["Buch lesen", "Artikel entdecken"],
+        Natur: ["Park besuchen", "Vogelbeobachtung"],
+        Technik: ["Coding Challenge", "Elektronik-Projekt"]
+    };
+    let selected = hobbies[Math.floor(Math.random()*hobbies.length)];
+    let idea = ideas[selected] ? ideas[selected][Math.floor(Math.random()*ideas[selected].length)] : "Etwas Neues entdecken!";
+    const username = localStorage.getItem("username") || "Freund";
+    generatorOutput.innerText = `Hey ${username}, probier doch: ${idea}`;
 });
-
-// Load hobbies
-if (localStorage.getItem("hobbies")) {
-    selectedHobbies = JSON.parse(localStorage.getItem("hobbies"));
-    hobbyButtons.forEach(btn => {
-        const hobby = btn.getAttribute("data-hobby");
-        if (selectedHobbies.includes(hobby)) {
-            btn.style.background = "var(--accent)";
-            btn.style.color = "#fff";
-        }
-    });
-}
-
-// -----------------------
-// Animation Depth
-// -----------------------
-const animDepth = document.getElementById("animation-depth");
-animDepth.addEventListener("input", () => {
-    localStorage.setItem("animationDepth", animDepth.value);
-});
-
-// Load animation depth
-if (localStorage.getItem("animationDepth")) {
-    animDepth.value = localStorage.getItem("animationDepth");
-}
-
-// -----------------------
-// Font Selection
-// -----------------------
-const fontSelect = document.getElementById("font-select");
-fontSelect.addEventListener("change", () => {
-    document.body.style.fontFamily = fontSelect.value;
-    localStorage.setItem("font", fontSelect.value);
-});
-// Load font
-if (localStorage.getItem("font")) {
-    fontSelect.value = localStorage.getItem("font");
-    document.body.style.fontFamily = fontSelect.value;
-}
-
-// -----------------------
-// Accent color
-// -----------------------
-const accentInput = document.getElementById("accent-color");
-accentInput.addEventListener("input", () => {
-    root.style.setProperty("--accent", accentInput.value);
-    localStorage.setItem("accent", accentInput.value);
-});
-// Load accent
-if (localStorage.getItem("accent")) {
-    const color = localStorage.getItem("accent");
-    accentInput.value = color;
-    root.style.setProperty("--accent", color);
-}
-
-// -----------------------
-// Sounds On/Off (placeholder)
-// -----------------------
-let soundEnabled = true;
-document.getElementById("sound-on-btn").addEventListener("click", () => {
-    soundEnabled = true;
-    localStorage.setItem("soundEnabled", "true");
-});
-document.getElementById("sound-off-btn").addEventListener("click", () => {
-    soundEnabled = false;
-    localStorage.setItem("soundEnabled", "false");
-});
-// Load sound setting
-if (localStorage.getItem("soundEnabled") === "false") soundEnabled = false;
-
 </script>
 
-<!-- END OF PART 3 -->
 <!-- ============================================== -->
 <!--  WAS-SOLL-ICH-TUN GENERATOR                     -->
 <!-- ============================================== -->
